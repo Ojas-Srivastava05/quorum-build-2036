@@ -1,6 +1,6 @@
 # Quorum — BUILD 2036 form copy
 
-Paste the two sections below into the form. GitHub, deploy, video, and deck links are TBD until Phase 2.
+Paste the two sections below into the form. Demo video and solution deck are still TBD.
 
 ## Prototype Brief
 
@@ -12,7 +12,7 @@ Next.js 16 App Router and TypeScript. Tailwind CSS 4 and Framer Motion. Syne and
 
 ## Links
 
-- GitHub: TBD
-- Deployed link: TBD
+- GitHub: https://github.com/Ojas-Srivastava05/quorum-build-2036
+- Deployed link: https://quorum-build-2036.vercel.app
 - Demo video: TBD
 - Solution deck: TBD
