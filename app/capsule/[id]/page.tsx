@@ -4,6 +4,7 @@ import { allCapsuleIds, getCapsule } from "@/lib/capsule/store";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 export function generateStaticParams() {
   return allCapsuleIds().map((id) => ({ id }));
@@ -20,7 +21,29 @@ export async function generateMetadata({
   return { title: `Capsule ${capsule.seal.hash.slice(0, 8)}` };
 }
 
-export default async function CapsulePage({
+export default function CapsulePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  return (
+    <Suspense fallback={<CapsuleFallback />}>
+      <CapsuleDocument params={params} />
+    </Suspense>
+  );
+}
+
+function CapsuleFallback() {
+  return (
+    <main className="capsule-page">
+      <article className="capsule-wrap">
+        <p className="quiet">Opening the seal.</p>
+      </article>
+    </main>
+  );
+}
+
+async function CapsuleDocument({
   params,
 }: {
   params: Promise<{ id: string }>;
