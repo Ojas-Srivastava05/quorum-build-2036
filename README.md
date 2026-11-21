@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Quorum
 
-## Getting Started
+Quorum is a civic war room for BUILD 2036. Six agents — Scout, Risk, Sim, Equity, Ops, and a dedicated Adversary — debate a city crisis in the open, simulate three forks of the next 72 hours, and seal a Decision Capsule.
 
-First, run the development server:
+There is no live model and no API key. Deliberation is a timed mock stream behind an `LLMProvider` seam.
+
+## Run
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `/` cinematic landing
+- `/war-room` council, city map, forks, and capsule ceremony
+- `/capsule/[id]` sealed Decision Capsule
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Production build:
 
-## Learn More
+```bash
+npm run build
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Demo Mode
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+In the war room, click **Demo Mode**. It plays the Indore monsoon flood straight through: intake, specialist reports, adversary strikes, 72-hour forks, an automatic lock on Hybrid, and the capsule seal. The run is about a minute. Use **Open the floor** to run flood, heatwave, or budget triage and lock a fork yourself.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The confidence ribbon is meant to fall when the Adversary lands a hit and recover only when another seat answers. The seal hash is SHA-256 over the canonical capsule JSON.
 
-## Deploy on Vercel
+## Scenarios
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Indore monsoon flood (18 July 2036)
+- Heatwave (12 May 2036)
+- Recovery budget triage (2 August 2036)
