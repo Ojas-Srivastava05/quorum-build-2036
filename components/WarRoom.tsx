@@ -33,17 +33,25 @@ export function WarRoom() {
     feedEnd.current?.scrollIntoView({ block: "end" });
   }, [state.turns.length, state.dissent.length]);
 
+  const latestId = last?.id;
+
   return (
-    <main className={`war-shell ${state.hit ? "was-struck" : ""}`}>
+    <main
+      className={`war ${state.hit ? "was-struck" : ""} ${busy ? "is-live" : ""} is-${state.status}`}
+      aria-busy={busy}
+    >
       <div className="war-rain" aria-hidden="true" />
+      <div className="grain" aria-hidden="true" />
       {state.hit > 0 ? <div key={state.hit} className="strike-flash" /> : null}
-      <header className="war-bar">
-        <div className="war-brand">
-          <Link href="/">Quorum</Link>
-          <p>
-            {meta.place} · {meta.name}
+      <header className="war-command">
+        <div className="war-id">
+          <Link href="/" className="war-mark">
+            QUORUM
+          </Link>
+          <div className="war-place">
+            <strong>{meta.place}</strong>
             <span>{meta.clock}</span>
-          </p>
+          </div>
         </div>
         <p className="phase-label">{state.phaseLabel}</p>
         <div className="war-controls">
@@ -60,7 +68,7 @@ export function WarRoom() {
               </button>
             ))}
           </div>
-          <button type="button" className="ghost-btn" disabled={busy} onClick={room.startFloor}>
+          <button type="button" className="text-action" disabled={busy} onClick={room.startFloor}>
             Open the floor
           </button>
           <button
@@ -73,12 +81,7 @@ export function WarRoom() {
           </button>
         </div>
       </header>
-      <ConfidenceRibbon
-        value={state.confidence}
-        reason={state.confidenceReason}
-        hit={state.hit}
-      />
-      <div className="war-stage">
+      <div className="war-compose">
         <section className="map-column" aria-label="City pulse">
           <CityPulseMap
             wards={state.wards}
@@ -90,6 +93,7 @@ export function WarRoom() {
           <DebateTheater
             active={state.activeAgent}
             arc={state.arc}
+            struck={state.hit}
             speaker={last?.agent ?? null}
             caption={
               last?.text ??
@@ -101,18 +105,25 @@ export function WarRoom() {
           <div className="feed" aria-label="Council floor">
             <header>
               <h2>Floor</h2>
-              <span>{state.demo ? "Demo" : state.status}</span>
+              <span className={state.demo ? "is-demo" : ""}>
+                {state.demo ? "Demo" : state.status}
+              </span>
             </header>
             {state.turns.length === 0 ? (
-              <p className="quiet">
-                Open the floor to hear this scenario, or run Demo Mode for the Indore monsoon.
+              <p className={`quiet ${busy ? "is-waiting" : ""}`}>
+                {busy ? "Opening the floor." : "No one has spoken."}
               </p>
             ) : (
               <ol>
                 {state.turns.map((turn) => {
                   const agent = getAgent(turn.agent);
                   return (
-                    <li key={turn.id} className={turn.agent === "adversary" ? "is-adversary" : ""}>
+                    <li
+                      key={turn.id}
+                      className={`${turn.agent === "adversary" ? "is-adversary" : ""} ${
+                        turn.id === latestId ? "is-latest" : ""
+                      }`}
+                    >
                       <span style={{ color: agent.color }}>
                         {agent.name}
                         <em>{TONE[turn.tone]}</em>
@@ -134,14 +145,21 @@ export function WarRoom() {
           />
         </aside>
       </div>
-      {state.error ? <p className="war-error">{state.error}</p> : null}
-      <ForkSimulator
-        forks={state.forks}
-        armed={state.armedFork}
-        locked={state.lockedFork}
-        choosable={state.status === "gate"}
-        onLock={room.lockFork}
-      />
+      <footer className="war-deck">
+        <ConfidenceRibbon
+          value={state.confidence}
+          reason={state.confidenceReason}
+          hit={state.hit}
+        />
+        {state.error ? <p className="war-error">{state.error}</p> : null}
+        <ForkSimulator
+          forks={state.forks}
+          armed={state.armedFork}
+          locked={state.lockedFork}
+          choosable={state.status === "gate"}
+          onLock={room.lockFork}
+        />
+      </footer>
       {state.showSeal && state.capsule ? (
         <CapsuleSeal
           capsule={state.capsule}

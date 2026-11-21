@@ -33,7 +33,10 @@ export function ForkSimulator({
   const peak = Math.max(40, ...forks.flatMap((fork) => fork.spark), 0);
 
   return (
-    <section className="forks" aria-label="72-hour fork simulator">
+    <section
+      className={`forks ${choosable ? "is-open" : ""} ${locked ? "is-locked" : ""}`}
+      aria-label="72-hour fork simulator"
+    >
       <header>
         <h2>72-hour forks</h2>
         <p>

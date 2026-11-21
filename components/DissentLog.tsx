@@ -9,7 +9,7 @@ export function DissentLog({ notes }: { notes: DissentNote[] }) {
         <span>{notes.length === 0 ? "Clear" : `${notes.length} on record`}</span>
       </header>
       {notes.length === 0 ? (
-        <p className="quiet">No dissent on the record yet.</p>
+        <p className="quiet">The record is clean.</p>
       ) : (
         <ol>
           {notes.map((note, index) => (

@@ -13,7 +13,10 @@ export function ConfidenceRibbon({
   return (
     <div className="ribbon" data-hit={hit}>
       <p>
-        Confidence <strong>{formatConfidence(value)}</strong>
+        Confidence{" "}
+        <strong key={hit} className={hit > 0 ? "is-hit" : undefined}>
+          {formatConfidence(value)}
+        </strong>
       </p>
       <div className="ribbon-track" aria-hidden="true">
         <div className="ribbon-fill" style={{ width: `${width}%` }} />

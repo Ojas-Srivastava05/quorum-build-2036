@@ -1,6 +1,6 @@
 import { DownloadCapsule } from "@/components/DownloadCapsule";
+import { SealMedallion } from "@/components/SealMedallion";
 import { allCapsuleIds, getCapsule } from "@/lib/capsule/store";
-import { formatHash } from "@/lib/format";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -31,20 +31,30 @@ export default async function CapsulePage({
 
   return (
     <main className="capsule-page">
+      <div className="capsule-sky" aria-hidden="true">
+        <div className="rain rain-a" />
+        <div className="grain" />
+      </div>
       <article className="capsule-wrap">
-        <p className="capsule-kicker">Quorum · Decision Capsule</p>
-        <h1>Sealed</h1>
-        <p className="lead">
-          {capsule.city} · {capsule.scenarioTitle} · {capsule.clock}
-        </p>
-        <div className="capsule-seal">
-          <span>{capsule.seal.algorithm}</span>
-          <strong>{formatHash(capsule.seal.hash)}</strong>
-          <em>{capsule.seal.sealedAt}</em>
-        </div>
-        <p className="meta">
-          Fork {capsule.fork} · {capsule.forkName} · confidence {capsule.confidence.toFixed(2)}
-        </p>
+        <header className="capsule-mast">
+          <Link href="/" className="capsule-brand">
+            QUORUM
+          </Link>
+          <SealMedallion
+            hash={capsule.seal.hash}
+            sealedAt={capsule.seal.sealedAt}
+            algorithm={capsule.seal.algorithm}
+          />
+          <h1>Sealed</h1>
+          <p className="lead">
+            {capsule.city} · {capsule.scenarioTitle}
+          </p>
+          <p className="clock">{capsule.clock}</p>
+          <p className="meta">
+            Fork {capsule.fork} · {capsule.forkName} · confidence {capsule.confidence.toFixed(2)}
+          </p>
+        </header>
+
         <h2>Citizen brief</h2>
         <div className="brief-block">
           <p>{capsule.citizenBrief}</p>
@@ -53,7 +63,7 @@ export default async function CapsulePage({
         <ol className="actions">
           {capsule.rankedActions.map((action) => (
             <li key={action.rank}>
-              <span>{action.rank}</span>
+              <span>{String(action.rank).padStart(2, "0")}</span>
               <div>
                 <strong>{action.title}</strong>
                 <p>

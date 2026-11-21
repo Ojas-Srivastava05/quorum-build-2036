@@ -6,18 +6,21 @@ const syne = Syne({
   subsets: ["latin"],
   variable: "--font-syne",
   weight: ["500", "600", "700", "800"],
+  display: "swap",
 });
 
 const instrument = Instrument_Sans({
   subsets: ["latin"],
   variable: "--font-instrument",
   weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 const seal = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-seal",
   weight: ["400", "500"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {

@@ -1,30 +1,77 @@
+"use client";
+
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 
 export default function Home() {
+  const reduce = useReducedMotion();
+  const enter = (delay: number, y = 16) =>
+    reduce
+      ? {}
+      : {
+          initial: { opacity: 0, y },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] as const },
+        };
+
   return (
-    <main className="landing">
-      <div className="rain rain-a" aria-hidden="true" />
-      <div className="rain rain-b" aria-hidden="true" />
-      <div className="rain rain-c" aria-hidden="true" />
-      <div className="pulse-grid" aria-hidden="true" />
-      <div className="horizon" aria-hidden="true" />
-      <svg className="skyline" viewBox="0 0 1440 280" preserveAspectRatio="none" aria-hidden="true">
-        <path
-          fill="#07141a"
-          d="M0 280 V150 H70 V90 H110 V150 H160 V40 H210 V150 H250 V110 H310 V170 H360 V60 H410 V170 H470 V100 H530 V180 H600 V70 H660 V180 H720 V120 H790 V190 H860 V50 H920 V190 H990 V130 H1060 V200 H1120 V80 H1180 V200 H1260 V140 H1320 V200 H1440 V280 Z"
-        />
-      </svg>
-      <div className="wet-street" aria-hidden="true" />
-      <p className="landing-mark">Build 2036 · Frontier 01</p>
-      <section className="landing-copy">
-        <p className="wordmark">QUORUM</p>
-        <h1>Cities don’t need another dashboard. They need a quorum that can think under fire.</h1>
-        <Link className="war-cta" href="/war-room">
-          Open the War Room
-          <span aria-hidden="true">→</span>
-        </Link>
-      </section>
-      <p className="landing-foot">Indore · 18 July 2036 · monsoon cell holding</p>
+    <main className="hero">
+      <div className="hero-atmosphere" aria-hidden="true">
+        <div className="hero-wash" />
+        <div className="hero-grid" />
+        <div className="hero-orb hero-orb-a" />
+        <div className="hero-orb hero-orb-b" />
+        <div className="hero-rain" />
+        <div className="hero-grain" />
+      </div>
+
+      <div className="hero-shell">
+        <motion.p className="hero-kicker" {...enter(0, 10)}>
+          BUILD 2036 · Frontier 01 · Applied AI
+        </motion.p>
+
+        <motion.p className="hero-brand" {...enter(0.06, 24)}>
+          QUORUM
+        </motion.p>
+
+        <motion.h1 className="hero-line" {...enter(0.16, 16)}>
+          Cities don’t need another dashboard.
+        </motion.h1>
+
+        <motion.p className="hero-sub" {...enter(0.26, 12)}>
+          They need a quorum that can think under fire.
+        </motion.p>
+
+        <motion.div className="hero-actions" {...enter(0.36, 12)}>
+          <Link className="hero-cta" href="/war-room">
+            Open the War Room
+            <span aria-hidden="true">→</span>
+          </Link>
+          <p className="hero-meta">Indore monsoon · six agents · Decision Capsule</p>
+        </motion.div>
+      </div>
+
+      <aside className="hero-stage" aria-hidden="true">
+        <div className="radar">
+          <span className="radar-ring r1" />
+          <span className="radar-ring r2" />
+          <span className="radar-ring r3" />
+          <span className="radar-sweep" />
+          <span className="radar-core" />
+          <span className="radar-blip b1" />
+          <span className="radar-blip b2" />
+          <span className="radar-blip b3" />
+          <span className="radar-blip b4" />
+        </div>
+        <ul className="hero-agents">
+          {["Scout", "Risk", "Sim", "Equity", "Ops", "Adversary"].map((name, i) => (
+            <li key={name} style={{ animationDelay: `${0.45 + i * 0.08}s` }}>
+              <span className={name === "Adversary" ? "dot strike" : "dot"} />
+              {name}
+            </li>
+          ))}
+        </ul>
+      </aside>
     </main>
   );
 }

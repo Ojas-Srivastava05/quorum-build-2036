@@ -14,10 +14,10 @@ export interface WardVisual {
 
 function floodColor(severity: number) {
   const t = Math.max(0, Math.min(1, severity));
-  const red = Math.round(32 + t * 168);
-  const green = Math.round(104 - t * 36);
-  const blue = Math.round(102 - t * 40);
-  const alpha = 0.16 + t * 0.74;
+  const red = Math.round(22 + t * 206);
+  const green = Math.round(118 - t * 48);
+  const blue = Math.round(112 - t * 62);
+  const alpha = 0.2 + t * 0.62;
   return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 }
 
@@ -41,33 +41,64 @@ export function CityPulseMap({
       role="img"
       aria-label="Stylized Indore ward map"
     >
-      <rect width="1000" height="640" fill="#0b141b" />
-      <path d={RIVER} fill="none" stroke="#1e4c4a" strokeWidth="16" strokeLinecap="round" />
-      <path d={RIVER} fill="none" stroke="#3dbeb6" strokeWidth="2.5" strokeOpacity="0.8" />
+      <defs>
+        <radialGradient id="ground" cx="42%" cy="40%" r="78%">
+          <stop offset="0%" stopColor="#142430" />
+          <stop offset="68%" stopColor="#0c161d" />
+          <stop offset="100%" stopColor="#070e13" />
+        </radialGradient>
+        <linearGradient id="river" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#1a4e4a" />
+          <stop offset="50%" stopColor="#2f8f86" />
+          <stop offset="100%" stopColor="#143834" />
+        </linearGradient>
+        <pattern id="mesh" width="46" height="46" patternUnits="userSpaceOnUse">
+          <path d="M46 0H0V46" fill="none" stroke="rgba(150,196,190,0.07)" strokeWidth="1" />
+        </pattern>
+        <radialGradient id="map-vignette" cx="50%" cy="42%" r="68%">
+          <stop offset="58%" stopColor="rgba(0,0,0,0)" />
+          <stop offset="100%" stopColor="rgba(0,0,0,0.42)" />
+        </radialGradient>
+      </defs>
+      <rect width="1000" height="640" fill="url(#ground)" />
+      <rect width="1000" height="640" fill="url(#mesh)" />
+      <path d={RIVER} fill="none" stroke="url(#river)" strokeWidth="18" strokeLinecap="round" />
+      <path className="river-sheen" d={RIVER} fill="none" stroke="#d8fff8" strokeWidth="1.4" strokeLinecap="round" />
+      <path
+        className="river-flow"
+        d={RIVER}
+        fill="none"
+        stroke="#7ee0d6"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeDasharray="12 18"
+      />
       {WARDS.map((ward) => {
         const visual = wards[ward.id] ?? { severity: 0.05, hazard: 0, equity: 0 };
         return (
           <g key={ward.id}>
-            <path d={ward.d} fill="#142028" stroke="rgba(186,214,210,0.28)" strokeWidth="2" />
+            <path d={ward.d} fill="#121c24" stroke="rgba(186,214,210,0.24)" strokeWidth="1.5" />
             <path d={ward.d} fill={floodColor(visual.severity)} />
             {visual.hazard > 0.15 ? (
               <circle
+                className="hazard-ring"
                 cx={ward.cx}
                 cy={ward.cy}
                 r={26 + visual.hazard * 34}
                 fill="none"
-                stroke="#d4654a"
-                strokeOpacity={0.35 + visual.hazard * 0.5}
-                strokeWidth="2"
-                strokeDasharray="5 6"
+                stroke="#e25b3c"
+                strokeOpacity={0.4 + visual.hazard * 0.45}
+                strokeWidth="1.6"
+                strokeDasharray="4 7"
               />
             ) : null}
             <text
               x={ward.cx}
               y={ward.cy}
               textAnchor="middle"
-              fill={visual.severity > 0.55 ? "#f3d7a1" : "#d5e6e3"}
-              fontSize="15"
+              fill={visual.severity > 0.55 ? "#f6ddb0" : "#d5e6e3"}
+              fontSize="14"
+              letterSpacing="0.4"
               fontFamily="var(--font-instrument), sans-serif"
             >
               {ward.name}
@@ -83,11 +114,12 @@ export function CityPulseMap({
         return (
           <path
             key={corridor.id}
+            className={active ? "corridor-live" : undefined}
             d={corridor.d}
             fill="none"
-            stroke={active ? "#f0a202" : "rgba(186,214,210,0.18)"}
-            strokeWidth={active ? 5 : 2}
-            strokeDasharray={active ? "0" : "7 8"}
+            stroke={active ? "#f5a524" : "rgba(186,214,210,0.2)"}
+            strokeWidth={active ? 4.5 : 1.6}
+            strokeDasharray={active ? undefined : "7 9"}
             strokeLinecap="round"
           />
         );
@@ -99,11 +131,11 @@ export function CityPulseMap({
             <circle
               cx={shelter.x}
               cy={shelter.y}
-              r={open ? 9 : 4}
-              fill={open ? "#f0a202" : "none"}
-              stroke="#f0a202"
-              strokeOpacity={open ? 1 : 0.35}
-              strokeWidth="2"
+              r={open ? 8 : 3.5}
+              fill={open ? "#f5a524" : "none"}
+              stroke="#f5a524"
+              strokeOpacity={open ? 1 : 0.4}
+              strokeWidth="1.6"
             />
             {open ? (
               <text
@@ -124,12 +156,13 @@ export function CityPulseMap({
         return (
           <g key={feed.id}>
             <circle
+              className={on ? "feed-live" : undefined}
               cx={feed.x}
               cy={feed.y}
-              r={on ? 6 : 3}
-              fill={on ? "#7ee0d6" : "#1d3336"}
+              r={on ? 5.5 : 2.6}
+              fill={on ? "#9ff3ea" : "#163034"}
               stroke="#7ee0d6"
-              strokeOpacity={on ? 0.9 : 0.3}
+              strokeOpacity={on ? 0.95 : 0.35}
             />
             {on ? (
               <text
@@ -145,9 +178,10 @@ export function CityPulseMap({
           </g>
         );
       })}
-      <text x="36" y="612" fill="#9eb0b6" fontSize="13" fontFamily="var(--font-instrument), sans-serif">
-        {legend} · stylized wards, not a survey
+      <text className="map-legend" x="28" y="34" fill="#8ea3a8" fontSize="13" letterSpacing="1.6">
+        {legend}
       </text>
+      <rect width="1000" height="640" fill="url(#map-vignette)" pointerEvents="none" />
     </svg>
   );
 }
